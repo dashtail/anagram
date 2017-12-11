@@ -10,28 +10,35 @@ namespace anagram {
         private static string chars;
 
         static void Main (string[] args) {
-            while (!int.TryParse (chars, out var x)) {
-                Console.WriteLine ("Entre com um valor numerico");
+            while (!int.TryParse (chars, out var x) || x < 0) {
+                Console.Write ("Entre com um valor numerico: ");
                 chars = Console.ReadLine ();
             }
 
             List<char> charsUsed = new List<char> ();
             List<char> charsLeft = new List<char> (chars);
+
+            var ss = new Stopwatch ();
+            ss.Start ();
+
             RecursiveCount (charsUsed, charsLeft);
 
             List<int> anagramInt = anagram.Select (int.Parse).ToList ();
-            anagram.ForEach (Console.WriteLine);
+
+            //anagram.ForEach (Console.WriteLine);
 
             int maxNumber = anagramInt.Max () >= 100000000 ? -1 : anagramInt.Max ();
 
             Console.WriteLine ("maior numero é: " + maxNumber);
 
+            ss.Stop ();
+            Console.WriteLine ($">> elapsed time: {ss.ElapsedMilliseconds} ms");
+
             Console.ReadLine ();
         }
         static void RecursiveCount (List<char> charsUsed, List<char> charsLeft) {
-            var result = new string (charsUsed.ToArray ());
-
-            if (charsUsed.Count == chars.Length && result != chars) {
+            if (charsUsed.Count == chars.Length) {
+                var result = new string (charsUsed.ToArray ());
                 anagram.Add (result);
             }
 
